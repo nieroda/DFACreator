@@ -12,7 +12,7 @@ A_n = A ^ 100
 
 answer = [1, 0, 0, 0] * A_n * [[1], [1], [1], [0]]
 #print(answer)
-#exit()
+##exit()
 # 1
 array = np.array([
 
@@ -55,7 +55,7 @@ array = np.array([
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0]], dtype=object)
 
-newMatrix = LA.matrix_power(array, 137)
+newMatrix = LA.matrix_power(array, 100)
 #[print(newMatrix)
 
 #print(array ^ 137)
@@ -111,7 +111,7 @@ finalMatrix = start.dot(newMatrix).dot(accepting)
 #semifinalMatrix = np.matmul(start, newMatrix)
 #finalMatrix = np.matmul(semifinalMatrix, accepting)
 #finalMatrix = (newMatrix * start) * accepting
-print(finalMatrix)
+#print(finalMatrix)
 
 #[print(a) for a in finalMatrix]
 #answer = start.dot(x).dot(accepting)
@@ -121,7 +121,7 @@ print(finalMatrix)
 #print(answer)
 
 #print(len(answer))
-exit()
+##exit()
 #array = np.array([[1, 2], [2, 1]], dtype=object)
  
  
@@ -130,12 +130,12 @@ exit()
 
 def Pop(queue):
     item = queue[0]
-    del queue
+    del queue[0]
     return item
 
 def Push(queue, item):
 
-    queue.insert(0, item)
+    queue.append(item)
     return queue
 
 def bfs(state_transition_table, start_state, alphabet):
@@ -143,69 +143,76 @@ def bfs(state_transition_table, start_state, alphabet):
     #[print(a) for a in state_transition_table]
     #quit()
     edge_input = {i:letter for i, letter in enumerate(alphabet)}
+    #[print(i, edge_input[i]) for i in edge_input.keys()]
     visited = [0] * len(state_transition_table)
     sequences_found_so_far = [(-1, -1)] * len(state_transition_table)
     queue = []
     #print(visited)
     visited[start_state] = 1
     queue = Push(queue, start_state)
-
     k = 0
-    while queue != []:
-        current_state = Pop(queue)
-        print('current state', current_state)
-        #print(state_transition_table[current_state])
+    while (queue != []):
+        current_remainder = Pop(queue)
+        #print('current state', current_remainder)
+        #print(state_transition_table[current_remainder])
         #print('next states')
-        #print(state_transition_table[current_state])
+        #print(state_transition_table[current_remainder])
         #print('tuple next states')
-        #print([(i, next_state) for i, next_state in enumerate(state_transition_table[current_state]) if i > 0])
-        next_states = [(i, next_state) for i, next_state in enumerate(state_transition_table[current_state])]
-        #print(next_states)
+        #print([(i, next_remainder) for i, next_remainder in enumerate(state_transition_table[current_remainder]) if i > 0])
+        next_remainders = [(edge_input[i], NextRemainder) for i, NextRemainder in enumerate(state_transition_table[current_remainder])]
+        #print(next_remainders)                                                                                             
 
         # also need the edge input value
-        for y in next_states:
+        for y in next_remainders:
+            #print(y)
             # current state could be 0 and one of the next states could be 0
             #i = y[0]
-            #next_state = y[1]
+            #next_remainder = y[1]
             #print(k)
-            (i, next_state) = y
-            #print(k, next_state)
+            (letter, next_remainder) = y
+            #print(k, next_remainder)
 
             # for catching input where there is no solution
             state_changed = False
-            if visited[next_state] == 0:
+            if visited[next_remainder] == 0:
                 # they are all new so this happens for all neighbors
                 #print(edge_input[i])
 
-                visited[next_state] = 1
+                visited[next_remainder] = 1
 
-                sequences_found_so_far[next_state] = (current_state, edge_input[i])
-                #print(next_state, current_state, sequences_found_so_far[next_state])
-                if next_state == 0:
-                    print('finished')
-                    exit()
-                queue = Push(queue, next_state)
+                sequences_found_so_far[next_remainder] = (current_remainder, letter)
+                #print(next_remainder, current_remainder, sequences_found_so_far[next_remainder])
+                
+                queue = Push(queue, next_remainder)
             # 0 is an accepting state
-            if next_state == 0:
+            if next_remainder == 0:
                 # what happens if current state = 0?
-                print(current_state)
+                #print(current_remainder)
                 # need the last link so the recovery process can start on the last character found
-                sequences_found_so_far[next_state] = (current_state, edge_input[i])
-                #print(next_state, current_state, sequences_found_so_far[next_state])
+                sequences_found_so_far[next_remainder] = (current_remainder, letter)
+                #print(next_remainder, current_remainder, sequences_found_so_far[next_remainder])
 
-                print('done')
-                #print(sequences_found_so_far, current_state, next_state)
+                #print('done')
+                #print(sequences_found_so_far, current_remainder, next_remainder)
                 #exit()
                 print()
                 # traverse sequences_found_so_far backwards to recover the string
 
-                return recover(sequences_found_so_far, next_state, edge_input)
+                return recover(sequences_found_so_far, next_remainder)
             #print(sequences_found_so_far)
             k += 1
-        k = 0
+            '''
+            if k == 100:
+                print()
+                filtered = [(i ,j) for i, j in sequences_found_so_far if i != -1 and j != -1]
+                [print('current_remainder', i, 'letter', j) for i, j in filtered]
+
+                exit()
+            '''
+        #print()
                 
 
-def recover(sequences_found_so_far, next_state, edge_input):
+def recover(sequences_found_so_far, next_remainder):
     # 31333
     # reversed = 33313
     # 33313 % 7 = 0
@@ -213,8 +220,8 @@ def recover(sequences_found_so_far, next_state, edge_input):
     # gives back 553
     # 553 % 7 = 0
     sequence = []
-    # this sets prev_state as the current_state > 0
-    (prev_state, input_index) = sequences_found_so_far[next_state]
+    # this sets prev_state as the current_remainder > 0
+    (prev_state, input_index) = sequences_found_so_far[next_remainder]
 
     #print((prev_state, input_index))
     sequence.insert(0, str(input_index))
@@ -232,7 +239,7 @@ def recover(sequences_found_so_far, next_state, edge_input):
 
 
 # 2
-def createArray(input_, k):
+def createArray(alphabet, n):
   
   # next states are remainders
   # can't visit enough of graph if the remainders never reach 26147
@@ -240,7 +247,7 @@ def createArray(input_, k):
   # remainder for order
   # make remainder using the remainders from k, each letter in the alphabet
   # why does it travel down the wrong path?
-  return [ [ ( i * 10 + item ) % k for item in input_ ] for i in range(k) ]
+  return [ [ ( remainder * 10 + letter ) % n for letter in alphabet ] for remainder in range(n) ]
 
 #print(bfs(createArray([1, 3], 26147), 0))
 # gives an infinite loop
@@ -249,6 +256,8 @@ def createArray(input_, k):
 alphabet = [1]
 print(bfs(createArray(alphabet, 198217), 0, alphabet))
 # works: eactly 10962 1's
+alphabet = [1,3]
+print(bfs(createArray(alphabet, 26147), 0, alphabet))
 
 
 #node = {'input_digit': 0, 'prev_digit': }
