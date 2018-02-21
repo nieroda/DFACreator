@@ -1,7 +1,6 @@
 
 import numpy as np
-
-
+from numpy import linalg as LA
 A = np.array([
     [1, 1, 0, 0],
     [1, 0, 1, 0],
@@ -56,8 +55,12 @@ array = np.array([
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0],
     [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0]], dtype=object)
 
-x = array ^ 137
-#[print(a) for a in x]
+newMatrix = LA.matrix_power(array, 137)
+#[print(newMatrix)
+
+#print(array ^ 137)
+#print(x)
+#[print(a) for a in finalMatrix]
 start = np.array([1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], dtype=object)
 
 accepting = np.array([
@@ -101,10 +104,21 @@ accepting = np.array([
                         
 
 ], dtype=object)
-answer = start.dot(x).dot(accepting)
+finalMatrix = start.dot(newMatrix).dot(accepting)
+#returns 
+#[6119266976149912241614898841866546736]
+
+#semifinalMatrix = np.matmul(start, newMatrix)
+#finalMatrix = np.matmul(semifinalMatrix, accepting)
+#finalMatrix = (newMatrix * start) * accepting
+print(finalMatrix)
+
+#[print(a) for a in finalMatrix]
+#answer = start.dot(x).dot(accepting)
+
 #print(start)
 #print(x)
-print(answer)
+#print(answer)
 
 #print(len(answer))
 exit()
@@ -232,7 +246,6 @@ def createArray(input_, k):
 # gives an infinite loop
 # maybe the test cases have no solutions
 # case 2 : Input: k = 198217, Digits permitted: 1
-# Shortest multiple of k using digits {1}: integer containing 10962 ones (Your output should be a string of this many 1’s.)
 alphabet = [1]
 print(bfs(createArray(alphabet, 198217), 0, alphabet))
 # works: eactly 10962 1's
@@ -253,7 +266,7 @@ def manyBFS(graph, start_vertex, verticies):
 '''
 '''
 >>> for i, letter in enumerate(['a', 'b', 'c']):
-...     print(i, letter)
+...    print(i, letter)
 ... 
 0 a
 1 b
