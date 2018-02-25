@@ -2,9 +2,10 @@ import sys
 import numpy as np
 from numpy import linalg as LA
 
-#Nathan K.
-#David T.
-#Brandon W.
+# Nathan K.
+# David T.
+# Brandon W.
+# Run with Python 3.
 
 #problem 1 count function
 def count(StringLength):
