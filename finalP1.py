@@ -1,6 +1,10 @@
-
+import sys
 import numpy as np
 from numpy import linalg as LA
+
+#Nathan K.
+#David T.
+#Brandon W.
 
 #problem 1 count function
 def count(StringLength):
@@ -43,7 +47,7 @@ def count(StringLength):
             [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0],
             [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0],
             [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0]], dtype=object)
-            
+
     #starting state
     start = np.array([1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], dtype=object)
 
@@ -87,11 +91,11 @@ def count(StringLength):
             [1],
             [1]
     ], dtype=object)
-    
+
     #using matrix formula presented in class
     newMatrix = LA.matrix_power(array, StringLength)
     finalMatrix = start.dot(newMatrix).dot(accepting)
-    
+
     return finalMatrix[0]
     #print(finalMatrix)
     #print('')
@@ -116,11 +120,11 @@ def bfs(state_transition_table, start_state, alphabet):
     queue = []
     visited[start_state] = 1
     queue = Push(queue, start_state)
-    
+
     while (queue != []):
         current_remainder = Pop(queue)
         next_remainders = [(edge_input[i], NextRemainder) for i, NextRemainder in enumerate(state_transition_table[current_remainder])]
-        
+
         for y in next_remainders:
             (letter, next_remainder) = y
 
@@ -136,7 +140,7 @@ def bfs(state_transition_table, start_state, alphabet):
 
             #0 is an accepting state
             if next_remainder == 0:
-                sequences_found_so_far[next_remainder] = (current_remainder, letter)            
+                sequences_found_so_far[next_remainder] = (current_remainder, letter)
                 return recover(sequences_found_so_far, next_remainder)
 
 def recover(sequences_found_so_far, next_remainder):
@@ -151,7 +155,7 @@ def recover(sequences_found_so_far, next_remainder):
     return ''.join(sequence)
 
 def createArray(alphabet, n):
-    
+
     #test = alphabet
     print("Shortest multiple of " + str(n) + " using digits {" + ' '.join(map(str,alphabet)) + "}:")
 
@@ -160,26 +164,34 @@ def createArray(alphabet, n):
 def minString(DFA, alphabet):
     return bfs(DFA, 0, alphabet)
 
-#testing
-Choice = int(input("Enter 1 to solve problem 1, 2 for problem 2, or 3 to exit: "))
 
-while Choice == 1 or Choice == 2:
-    if Choice == 1:
-        UserInput = int(input("enter an integer between 1 and 300: "))
-
-        while UserInput < 1 or UserInput > 300:
-            print("You must enter an integer between 1 and 300, try again:")
-            UserInput = int(input("enter an integer between 1 and 300: "))
-
-        print(count(UserInput))
-    
-    if Choice == 2:
-        IntInput = int(input("Enter a positive integer: "))
-        str_arr = input("Now enter digits permitted seperated by a space: ").split(' ')
-        alphabet = [int(num) for num in str_arr]
-        print(minString(createArray(alphabet, IntInput), alphabet))
-        
-    if Choice == 3:
-        break
+def main():
+    if sys.version_info <= (3, 0):
+        sys.exit('You need python 3.0>')
 
     Choice = int(input("Enter 1 to solve problem 1, 2 for problem 2, or 3 to exit: "))
+
+    while Choice == 1 or Choice == 2:
+        if Choice == 1:
+            UserInput = int(input("enter an integer between 1 and 300: "))
+
+            while UserInput < 1 or UserInput > 300:
+                print("You must enter an integer between 1 and 300, try again:")
+                UserInput = int(input("enter an integer between 1 and 300: "))
+
+            print(count(UserInput))
+
+        if Choice == 2:
+            IntInput = int(input("Enter a positive integer: "))
+            str_arr = input("Now enter digits permitted seperated by a space: ").split(' ')
+            alphabet = [int(num) for num in str_arr]
+            print(minString(createArray(alphabet, IntInput), alphabet))
+
+        if Choice == 3:
+            break
+
+        Choice = int(input("Enter 1 to solve problem 1, 2 for problem 2, or 3 to exit: "))
+
+
+if __name__ == '__main__':
+    main()
