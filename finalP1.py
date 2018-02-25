@@ -92,7 +92,7 @@ def count(StringLength):
     newMatrix = LA.matrix_power(array, StringLength)
     finalMatrix = start.dot(newMatrix).dot(accepting)
     
-    return finalMatrix
+    return finalMatrix[0]
     #print(finalMatrix)
     #print('')
 
